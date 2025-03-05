@@ -21,8 +21,9 @@ const FloatingNavBar = () => {
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
-      let previous = scrollYProgress.getPrevious();
-      let direction = previous !== undefined ? current - previous : 0;
+      const previous = scrollYProgress.getPrevious(); // Use 'const' instead of 'let'
+      const direction = previous !== undefined ? current - previous : 0; // Use 'const' instead of 'let'
+
       if (scrollYProgress.get() < 0.05) {
         setVisible(false);
       } else {
