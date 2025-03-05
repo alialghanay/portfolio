@@ -2,26 +2,16 @@
   {
     "id": 1,
     "name": "Home",
-    "url": "/"
+    "url": "#home"
   },
   {
     "id": 2,
     "name": "About",
-    "url": "/about"
-  },
-  {
-    "id": 3,
-    "name": "Projects",
-    "url": "/projects"
-  },
-  {
-    "id": 4,
-    "name": "Skills",
-    "url": "/skills"
+    "url": "#about"
   },
   {
     "id": 5,
     "name": "Contact",
-    "url": "/contact"
+    "url": "#contact"
   }
 ]

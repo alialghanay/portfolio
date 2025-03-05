@@ -7,7 +7,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 export default function HeroSection() {
   const words = "Turning Code into Scalable Solutions 🚀";
   return (
-    <div className="h-screen relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+    <section
+      className="h-screen relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md"
+      id="home"
+    >
       <div className="w-full absolute inset-0 h-screen">
         <SparklesCore
           id="tsparticlesfullpage"
@@ -32,6 +35,6 @@ export default function HeroSection() {
         className="text-center text-white"
         duration={6}
       />
-    </div>
+    </section>
   );
 }
