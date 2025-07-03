@@ -9,7 +9,7 @@ import {
 } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 import { ModeToggle } from "./dark-mode";
-import data from "@/lib/jsons/navs.json";
+import data from "@/lib/constants/navs.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
