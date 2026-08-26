@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { SparklesCore } from "../ui/sparkles";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/utils/i18n/navigation";
 import { ArrowDown, Mail } from "lucide-react";
 
 export default function HeroSection() {
