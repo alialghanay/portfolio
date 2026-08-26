@@ -12,15 +12,12 @@ const NavBar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Anchor links (e.g. #home) should stay on the homepage. When already on the
-  // homepage they can be a bare hash; on any other page they must include the
-  // locale so the browser navigates back to /{locale}#section instead of
-  // appending the hash to the current route.
-  const locale = pathname.split("/")[1];
-  const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+  // next-intl's usePathname returns the pathname without the locale prefix.
+  // Anchor links should stay on the homepage as bare hashes; on other pages
+  // they become root-relative hashes so the locale-aware Link prefixes them.
+  const isHome = pathname === "/";
   const hrefFor = (url: string) => {
-    if (url.startsWith("#")) return isHome ? url : `/${locale}${url}`;
-    if (url.startsWith("/")) return `/${locale}${url}`;
+    if (url.startsWith("#")) return isHome ? url : `/${url}`;
     return url;
   };
 
@@ -32,7 +29,7 @@ const NavBar = () => {
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link
-            href={isHome ? "#home" : `/${locale}/#home`}
+            href={isHome ? "#home" : "/#home"}
             className="uppercase text-base font-heading font-bold tracking-tight text-foreground"
           >
             Ali Alghanay

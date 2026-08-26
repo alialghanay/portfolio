@@ -1,25 +1,24 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/lib/utils/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 import type { NotesNode } from "@/lib/utils/notes-tree";
 import { ChevronRight, BookOpen } from "lucide-react";
 
-function buildHref(locale: string, slugParts: string[]): string {
+function buildHref(slugParts: string[]): string {
   const slug = slugParts.join("/");
-  return `/${locale}/notes${slug ? `/${slug}` : ""}`;
+  return `/notes${slug ? `/${slug}` : ""}`;
 }
 
 interface NavigationNodeProps {
   node: NotesNode;
-  locale: string;
   activeSlug: string[];
   depth: number;
   path: string[];
 }
 
-function NavigationNode({ node, locale, activeSlug, depth, path }: NavigationNodeProps) {
+function NavigationNode({ node, activeSlug, depth, path }: NavigationNodeProps) {
   const currentPath = [...path, node.slug];
   const hasChildren = node.children.length > 0;
   const onActivePath = activeSlug[depth] === node.slug;
@@ -40,7 +39,7 @@ function NavigationNode({ node, locale, activeSlug, depth, path }: NavigationNod
         {!hasChildren && <span className="w-3.5 h-3.5 mr-1" />}
         {node.outputPath ? (
           <Link
-            href={buildHref(locale, currentPath)}
+            href={buildHref(currentPath)}
             className={cn(
               "flex-1 text-sm rounded-md px-2 py-1 transition-colors",
               isActiveLeaf
@@ -67,7 +66,6 @@ function NavigationNode({ node, locale, activeSlug, depth, path }: NavigationNod
             <NavigationNode
               key={child.slug}
               node={child}
-              locale={locale}
               activeSlug={activeSlug}
               depth={depth + 1}
               path={currentPath}
@@ -81,16 +79,15 @@ function NavigationNode({ node, locale, activeSlug, depth, path }: NavigationNod
 
 interface NotesNavigationProps {
   tree: NotesNode;
-  locale: string;
   activeSlug?: string[];
 }
 
-export function NotesNavigation({ tree, locale, activeSlug = [] }: NotesNavigationProps) {
+export function NotesNavigation({ tree, activeSlug = [] }: NotesNavigationProps) {
   return (
     <nav className="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-8rem)] overflow-y-auto pr-2">
       <div className="mb-4">
         <Link
-          href={`/${locale}/notes`}
+          href="/notes"
           className="flex items-center gap-2 font-heading font-semibold text-foreground hover:text-accent transition-colors"
         >
           <BookOpen className="w-5 h-5" />
@@ -102,7 +99,6 @@ export function NotesNavigation({ tree, locale, activeSlug = [] }: NotesNavigati
           <NavigationNode
             key={child.slug}
             node={child}
-            locale={locale}
             activeSlug={activeSlug}
             depth={0}
             path={[]}

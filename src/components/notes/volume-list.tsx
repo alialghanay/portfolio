@@ -1,14 +1,13 @@
-import Link from "next/link";
+import { Link } from "@/lib/utils/i18n/navigation";
 import { BookOpen } from "lucide-react";
 import type { NotesNode } from "@/lib/utils/notes-tree";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface VolumeListProps {
   tree: NotesNode;
-  locale: string;
 }
 
-export function VolumeList({ tree, locale }: VolumeListProps) {
+export function VolumeList({ tree }: VolumeListProps) {
   if (tree.children.length === 0) {
     return (
       <div className="text-center py-20">
@@ -22,7 +21,7 @@ export function VolumeList({ tree, locale }: VolumeListProps) {
       {tree.children.map((volume) => (
         <Link
           key={volume.slug}
-          href={`/${locale}/notes/${volume.slug}`}
+          href={`/notes/${volume.slug}`}
           className="group outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
         >
           <Card className="h-full border-border bg-card hover:border-accent/30 transition-colors">

@@ -93,16 +93,16 @@ export default async function NotesPage({
   return (
     <main className="mx-auto w-full max-w-7xl px-6 pt-24 pb-16">
       <div className="flex flex-col lg:flex-row gap-10">
-        {tree && <NotesNavigation tree={tree} locale={locale} activeSlug={slug ?? []} />}
+        {tree && <NotesNavigation tree={tree} activeSlug={slug ?? []} />}
 
         <article className="flex-1 min-w-0">
-          <NotesBreadcrumbs items={breadcrumbs} locale={locale} />
+          <NotesBreadcrumbs items={breadcrumbs} />
           <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-8">
             {title}
           </h1>
           {isIndex ? (
             tree ? (
-              <VolumeList tree={tree} locale={locale} />
+              <VolumeList tree={tree} />
             ) : (
               <p className="text-muted-foreground">No note collections available yet.</p>
             )

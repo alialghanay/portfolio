@@ -1,22 +1,21 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/lib/utils/i18n/navigation";
 import { ChevronRight, Home } from "lucide-react";
 import type { NotesNode } from "@/lib/utils/notes-tree";
 
 interface NotesBreadcrumbsProps {
   items: NotesNode[];
-  locale: string;
 }
 
-export function NotesBreadcrumbs({ items, locale }: NotesBreadcrumbsProps) {
+export function NotesBreadcrumbs({ items }: NotesBreadcrumbsProps) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
       <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
         <li>
           <Link
-            href={`/${locale}/notes`}
+            href="/notes"
             className="flex items-center hover:text-foreground transition-colors"
           >
             <Home className="w-4 h-4" />
@@ -25,7 +24,7 @@ export function NotesBreadcrumbs({ items, locale }: NotesBreadcrumbsProps) {
         {items.slice(1).map((item, index) => {
           const isLast = index === items.length - 2;
           const slugParts = items.slice(1, index + 2).map((i) => i.slug);
-          const href = `/${locale}/notes${slugParts.length > 0 ? `/${slugParts.join("/")}` : ""}`;
+          const href = `/notes${slugParts.length > 0 ? `/${slugParts.join("/")}` : ""}`;
 
           return (
             <React.Fragment key={item.slug || index}>

@@ -9,11 +9,10 @@ const Footer = () => {
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
 
-  const locale = pathname.split("/")[1];
-  const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+  // next-intl's usePathname returns the pathname without the locale prefix.
+  const isHome = pathname === "/";
   const hrefFor = (url: string) => {
-    if (url.startsWith("#")) return isHome ? url : `/${locale}${url}`;
-    if (url.startsWith("/")) return `/${locale}${url}`;
+    if (url.startsWith("#")) return isHome ? url : `/${url}`;
     return url;
   };
 
@@ -44,7 +43,7 @@ const Footer = () => {
               </Link>
             ))}
             <Link
-              href={`/${locale}/notes`}
+              href="/notes"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Notes
