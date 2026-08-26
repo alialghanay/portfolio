@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Roboto_Mono } from "next/font/google";
+import { Archivo, Space_Grotesk } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -8,19 +8,22 @@ import Footer from "@/components/ui/footer";
 import { routing } from "@/lib/utils/i18n/routing";
 import { notFound } from "next/navigation";
 
-const robototSans = Roboto({
-  variable: "--font-roboto-sans",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Ali Mohammed Alghanay",
-  description: "Software Engineer | Web & Backend Developer",
+  title: "Ali Mohammed Al-Ghanay | Software Developer, Project Lead & Teaching Assistant",
+  description:
+    "Experienced Software Developer, Project Lead, and University Teaching Assistant from Tripoli, Libya. Specializing in Flutter, Next.js, React, Clean Architecture, and full-stack development.",
 };
 
 export default async function RootLayout({
@@ -42,7 +45,7 @@ export default async function RootLayout({
       className="scroll-smooth"
     >
       <body
-        className={`${robototSans.variable} ${robotoMono.variable} antialiased`}
+        className={`${archivo.variable} ${spaceGrotesk.variable} antialiased`}
       >
         <NextIntlClientProvider>
           <ThemeProvider

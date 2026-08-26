@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/docs
+
+# octospace notes pipeline (generated)
+/content
+/notes
+/public/notes-assets

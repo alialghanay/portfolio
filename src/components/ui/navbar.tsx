@@ -1,98 +1,122 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 import { ModeToggle } from "./dark-mode";
 import data from "@/lib/constants/navs.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils/cn";
 
-const FloatingNavBar = () => {
+const NavBar = () => {
   const pathname = usePathname();
-  const { scrollYProgress } = useScroll();
-  const [visible, setVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  useMotionValueEvent(scrollYProgress, "change", (current) => {
-    if (typeof current === "number") {
-      const previous = scrollYProgress.getPrevious(); // Use 'const' instead of 'let'
-      const direction = previous !== undefined ? current - previous : 0; // Use 'const' instead of 'let'
-
-      if (scrollYProgress.get() < 0.05) {
-        setVisible(false);
-      } else {
-        setVisible(direction < 0);
-      }
-    }
-  });
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  // Anchor links (e.g. #home) should stay on the homepage. When already on the
+  // homepage they can be a bare hash; on any other page they must include the
+  // locale so the browser navigates back to /{locale}#section instead of
+  // appending the hash to the current route.
+  const locale = pathname.split("/")[1];
+  const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+  const hrefFor = (url: string) => {
+    if (url.startsWith("#")) return isHome ? url : `/${locale}${url}`;
+    if (url.startsWith("/")) return `/${locale}${url}`;
+    return url;
   };
 
+  const toggleSidebar = () => setIsOpen((open) => !open);
+  const closeSidebar = () => setIsOpen(false);
+
   return (
-    <AnimatePresence mode="wait" key={pathname}>
-      <motion.header
-        initial={{ opacity: 1, y: -100 }}
-        animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
-        className="flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-md z-[5000] px-8 py-2 items-center justify-between max-w-[90%]"
-      >
-        <h1 className="uppercase text-lg font-bold">Ali Alghanay</h1>
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link
+            href={isHome ? "#home" : `/${locale}/#home`}
+            className="uppercase text-base font-heading font-bold tracking-tight text-foreground"
+          >
+            Ali Alghanay
+          </Link>
 
-        {/* Large screen navigation */}
-        <nav className="hidden sm:flex items-center gap-6">
-          {data.map((page, index) => (
-            <Link
-              key={index}
-              href={page.url}
-              className={
-                pathname == page.url ? "text-primary" : "hover:text-secondary"
-              }
+          {/* Large screen navigation */}
+          <nav
+            className="hidden sm:flex items-center gap-1"
+            aria-label="Main navigation"
+          >
+            {data.map((page) => (
+              <Link
+                key={page.id}
+                href={hrefFor(page.url)}
+                className={cn(
+                  "px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  pathname === hrefFor(page.url)
+                    ? "text-primary bg-muted"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                {page.name}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Dark mode toggle & mobile menu */}
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <button
+              onClick={toggleSidebar}
+              className="sm:hidden p-2 rounded-full text-foreground hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
-              {page.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Dark mode toggle & mobile menu */}
-        <div className="flex items-center gap-4">
-          <ModeToggle />
-          <button onClick={toggleSidebar} className="sm:hidden">
-            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </button>
+              {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+            </button>
+          </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile sidebar */}
-      <aside
-        className={`fixed bottom-0 left-0 w-full rounded-t-2xl bg-sidebar shadow-md transform transition-all duration-500 ease-in-out ${
-          isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-        } h-[85dvh] z-40 flex flex-col items-center p-4`}
-      >
-        <ul className="mt-8 flex flex-col items-center gap-6">
-          {data.map((page, index) => (
-            <li
-              key={index}
-              className={
-                pathname == page.url
-                  ? "text-primary text-xl"
-                  : "hover:text-primary hover:text-2xl text-xl"
-              }
+      <AnimatePresence>
+        {isOpen && (
+          <motion.aside
+            id="mobile-menu"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed bottom-0 left-0 w-full rounded-t-2xl bg-background border-t border-border shadow-lg h-[85dvh] z-40 flex flex-col items-center p-6"
+          >
+            <button
+              onClick={closeSidebar}
+              className="absolute top-4 right-4 p-2 rounded-full text-foreground hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Close menu"
             >
-              <Link href={page.url}>{page.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    </AnimatePresence>
+              <FiX size={24} />
+            </button>
+            <ul className="mt-12 flex flex-col items-center gap-6">
+              {data.map((page) => (
+                <li key={page.id}>
+                  <Link
+                    href={hrefFor(page.url)}
+                    onClick={closeSidebar}
+                    className={cn(
+                      "text-2xl font-heading font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring rounded px-2",
+                      pathname === hrefFor(page.url)
+                        ? "text-accent"
+                        : "text-foreground hover:text-accent"
+                    )}
+                  >
+                    {page.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
-export default FloatingNavBar;
+export default NavBar;

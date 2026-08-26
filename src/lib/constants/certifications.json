@@ -1,0 +1,97 @@
+{
+  "certificates": [
+    {
+      "id": 1,
+      "title": "Responsive Web Design",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": "https://www.freecodecamp.org/certification/alialghanay6/responsive-web-design",
+      "date": "July 30, 2020",
+      "imageUrl": "/certificates/responsive-web-design.png"
+    },
+    {
+      "id": 2,
+      "title": "JavaScript Algorithms & Data Structures",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    },
+    {
+      "id": 3,
+      "title": "Front-End Development Libraries",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    },
+    {
+      "id": 4,
+      "title": "Data Visualization",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    },
+    {
+      "id": 5,
+      "title": "Back-End Development & APIs",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    },
+    {
+      "id": 6,
+      "title": "Quality Assurance",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    },
+    {
+      "id": 7,
+      "title": "Scientific Computing with Python",
+      "issuer": "freeCodeCamp",
+      "credentialUrl": null,
+      "date": null,
+      "imageUrl": null
+    }
+  ],
+  "academic": [
+    {
+      "id": 1,
+      "title": "Master of Science in Software Development",
+      "institution": "University of Tripoli",
+      "location": "Tripoli, Libya",
+      "status": "Paused for overseas scholarship",
+      "details": "Completed 2 taught semesters; 1 semester and thesis remaining upon return.",
+      "documentUrl": null
+    },
+    {
+      "id": 2,
+      "title": "Bachelor of Science in Software Engineering",
+      "institution": "University of Tripoli, Faculty of Information Technology",
+      "location": "Tripoli, Libya",
+      "status": "Completed",
+      "details": "Grade: 71.7%",
+      "documentUrl": null
+    }
+  ],
+  "leadership": [
+    {
+      "id": 1,
+      "title": "Assistant Troop Leader",
+      "organization": "Scout Movement, Tripoli"
+    },
+    {
+      "id": 2,
+      "title": "Core Team Member",
+      "organization": "Google Developer Student Club – UoT"
+    },
+    {
+      "id": 3,
+      "title": "IT Director",
+      "organization": "Technology Brain Foundation"
+    }
+  ]
+}

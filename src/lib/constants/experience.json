@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "category": "Entrepreneurial",
+    "role": "Founder & Team Lead",
+    "company": "Octobits.ly",
+    "location": "Tripoli, Libya",
+    "period": "",
+    "bullets": [
+      "Founded and led the initial technical team for the Octobits software platform.",
+      "Managed end-to-end frontend web development, staging environments, build pipelines, and production deployment."
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Commercial",
+    "role": "Lead Mobile & Systems Developer / Project Manager",
+    "company": "Mutah.ly Platform — Al-Aman Al-Jadeed Company",
+    "location": "Libya",
+    "period": "",
+    "bullets": [
+      "Designed and built the Mutah.ly digital services marketplace app and the Muta7 Collector companion app for field operations.",
+      "Structured the codebase using Flutter, Dart, and Clean Architecture principles to ensure scalability and maintainability."
+    ]
+  },
+  {
+    "id": 3,
+    "category": "Commercial",
+    "role": "Software Developer",
+    "company": "Addidi.ly",
+    "location": "Libya",
+    "period": "",
+    "bullets": [
+      "Contributed to the development and architecture of a live production mobile application operating in the Libyan market."
+    ]
+  },
+  {
+    "id": 4,
+    "category": "Professional",
+    "role": "University Teaching Assistant / Lecturer",
+    "company": "University of Tripoli, Faculty of Information Technology",
+    "location": "Tripoli, Libya",
+    "period": "",
+    "bullets": [
+      "Instructed undergraduate courses including Object-Oriented Programming in Java (ITGS211).",
+      "Administered exams, designed practical lab assignments, and evaluated student technical evaluations."
+    ]
+  },
+  {
+    "id": 5,
+    "category": "Professional",
+    "role": "Front-End Web Developer",
+    "company": "Future Version",
+    "location": "Tripoli, Libya",
+    "period": "Nov 2023 – Feb 2024",
+    "bullets": [
+      "Developed responsive web applications using React.js and Next.js frameworks."
+    ]
+  },
+  {
+    "id": 6,
+    "category": "Professional",
+    "role": "Web Developer (Freelance / Contract)",
+    "company": "Self-employed",
+    "location": "Tripoli, Libya",
+    "period": "May 2023 – June 2023",
+    "bullets": [
+      "Developed custom commercial platforms including Alekhwa Printing Services & Media Website and AlNarjis Carpets System."
+    ]
+  },
+  {
+    "id": 7,
+    "category": "Professional",
+    "role": "Administrator",
+    "company": "Riaaia Health Care",
+    "location": "Tripoli, Libya",
+    "period": "Aug 2021 – Jan 2023",
+    "bullets": [
+      "Managed administrative systems and operations for the healthcare organization."
+    ]
+  }
+]
