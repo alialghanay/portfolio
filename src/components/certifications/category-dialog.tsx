@@ -26,7 +26,7 @@ export default function CategoryDialog({ title, icon, children }: CategoryDialog
           View all
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl max-h-[80dvh] overflow-y-auto">
+      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl max-h-[80dvh] overflow-y-auto bg-card">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <span aria-hidden="true">{icon}</span>
