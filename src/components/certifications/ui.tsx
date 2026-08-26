@@ -95,7 +95,7 @@ function AcademicCard({ item }: { item: (typeof data.academic)[number] }) {
 
 function LeadershipCard({ item }: { item: (typeof data.leadership)[number] }) {
   return (
-    <Card className="border-border bg-card hover:border-accent/30 transition-colors h-full">
+    <Card className="border-border bg-card hover:border-accent/30 transition-colors">
       <CardContent className="p-4 flex items-start gap-3">
         <Users className="w-5 h-5 text-accent mt-0.5 shrink-0" />
         <div>
@@ -138,7 +138,9 @@ export default function Certifications() {
             transition={{ duration: 0.5 }}
           >
             <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <GraduationCap className="w-5 h-5 text-accent" />
+              <span aria-hidden="true">
+                <GraduationCap className="w-5 h-5 text-accent" />
+              </span>
               Academic Credentials
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -171,7 +173,9 @@ export default function Certifications() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <Award className="w-5 h-5 text-accent" />
+              <span aria-hidden="true">
+                <Award className="w-5 h-5 text-accent" />
+              </span>
               Tech Certificates
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -204,7 +208,9 @@ export default function Certifications() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <Users className="w-5 h-5 text-accent" />
+              <span aria-hidden="true">
+                <Users className="w-5 h-5 text-accent" />
+              </span>
               Leadership & Community
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
