@@ -51,7 +51,7 @@ function loadFragment(slug: string[] | undefined, locale: string): string | unde
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => [
-    { locale, slug: undefined as string[] | undefined },
+    { locale, slug: undefined },
     ...collectSlugs(NOTES_DIR).map((slug) => ({ locale, slug })),
   ]);
 }
@@ -111,7 +111,7 @@ export default async function NotesPage({
               className="notes-content"
               // Fragments are generated from trusted local Markdown by Octospace,
               // which escapes raw HTML in the source.
-              dangerouslySetInnerHTML={{ __html: html! }}
+              dangerouslySetInnerHTML={{ __html: html || "" }}
             />
           )}
         </article>

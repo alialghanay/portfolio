@@ -5,9 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 import { ModeToggle } from "./dark-mode";
 import data from "@/lib/constants/navs.json";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
+import { Link, usePathname } from "@/lib/utils/i18n/navigation";
 
 const NavBar = () => {
   const pathname = usePathname();
@@ -44,20 +43,26 @@ const NavBar = () => {
             className="hidden sm:flex items-center gap-1"
             aria-label="Main navigation"
           >
-            {data.map((page) => (
-              <Link
-                key={page.id}
-                href={hrefFor(page.url)}
-                className={cn(
-                  "px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  pathname === hrefFor(page.url)
-                    ? "text-primary bg-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                )}
-              >
-                {page.name}
-              </Link>
-            ))}
+            {data.map((page) => {
+              const href = hrefFor(page.url);
+              const isActive = page.url.startsWith("#")
+                ? isHome
+                : pathname === href;
+              return (
+                <Link
+                  key={page.id}
+                  href={href}
+                  className={cn(
+                    "px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    isActive
+                      ? "text-primary bg-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
+                >
+                  {page.name}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Dark mode toggle & mobile menu */}
@@ -95,22 +100,28 @@ const NavBar = () => {
               <FiX size={24} />
             </button>
             <ul className="mt-12 flex flex-col items-center gap-6">
-              {data.map((page) => (
-                <li key={page.id}>
-                  <Link
-                    href={hrefFor(page.url)}
-                    onClick={closeSidebar}
-                    className={cn(
-                      "text-2xl font-heading font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring rounded px-2",
-                      pathname === hrefFor(page.url)
-                        ? "text-accent"
-                        : "text-foreground hover:text-accent"
-                    )}
-                  >
-                    {page.name}
-                  </Link>
-                </li>
-              ))}
+              {data.map((page) => {
+                const href = hrefFor(page.url);
+                const isActive = page.url.startsWith("#")
+                  ? isHome
+                  : pathname === href;
+                return (
+                  <li key={page.id}>
+                    <Link
+                      href={href}
+                      onClick={closeSidebar}
+                      className={cn(
+                        "text-2xl font-heading font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring rounded px-2",
+                        isActive
+                          ? "text-accent"
+                          : "text-foreground hover:text-accent"
+                      )}
+                    >
+                      {page.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </motion.aside>
         )}

@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { FiLinkedin, FiGithub } from "react-icons/fi";
+import { Link, usePathname } from "@/lib/utils/i18n/navigation";
 import { FaXTwitter } from "react-icons/fa6";
 import data from "@/lib/constants/navs.json";
 
