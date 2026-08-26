@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "title": "Octobits.ly",
+    "featured": true,
+    "role": "Founder & Team Lead",
+    "description": "Founded and led the initial technical team for the Octobits software platform. Managed end-to-end frontend web development, staging environments, build pipelines, and production deployment.",
+    "tags": ["Next.js", "React", "CI/CD", "Leadership"],
+    "image": null,
+    "liveUrl": "https://octobits.ly",
+    "repoUrl": null
+  },
+  {
+    "id": 2,
+    "title": "Mutah.ly",
+    "featured": true,
+    "role": "Lead Mobile & Systems Developer / PM",
+    "description": "Designed and built the Mutah.ly digital services marketplace app and the Muta7 Collector companion app for field operations in Libya. Structured the codebase with Flutter, Dart, and Clean Architecture.",
+    "tags": ["Flutter", "Dart", "Clean Architecture", "Mobile"],
+    "image": null,
+    "liveUrl": "https://mutah.ly",
+    "repoUrl": null
+  },
+  {
+    "id": 3,
+    "title": "Addidi.ly",
+    "featured": true,
+    "role": "Software Developer",
+    "description": "Contributed to the development and architecture of a live production mobile application operating in the Libyan market.",
+    "tags": ["Flutter", "Mobile", "Production"],
+    "image": null,
+    "liveUrl": "https://addidi.ly",
+    "repoUrl": null
+  },
+  {
+    "id": 4,
+    "title": "Alekhwa Printing Services & Media",
+    "featured": true,
+    "role": "Freelance Web Developer",
+    "description": "Developed a custom commercial platform for Alekhwa Printing Services & Media, delivering a responsive web presence for the business.",
+    "tags": ["Next.js", "React", "Web"],
+    "image": null,
+    "liveUrl": "#",
+    "repoUrl": null
+  },
+  {
+    "id": 5,
+    "title": "AlNarjis Carpets System",
+    "featured": false,
+    "role": "Freelance Web Developer",
+    "description": "Built a custom commercial platform for AlNarjis Carpets, focusing on product presentation and business workflow support.",
+    "tags": ["Next.js", "React", "Web"],
+    "image": null,
+    "liveUrl": "#",
+    "repoUrl": null
+  },
+  {
+    "id": 6,
+    "title": "Tribute Page",
+    "featured": false,
+    "role": "freeCodeCamp Project",
+    "description": "A responsive tribute page for Omar al-Mukhtar with semantic HTML, accessible markup, and a mobile-friendly layout.",
+    "tags": ["HTML", "CSS", "Responsive"],
+    "image": null,
+    "liveUrl": "https://alialghanay.github.io/fcc-rwd-tribute-page/",
+    "repoUrl": "https://github.com/alialghanay/fcc-rwd-tribute-page"
+  },
+  {
+    "id": 7,
+    "title": "Survey Form",
+    "featured": false,
+    "role": "freeCodeCamp Project",
+    "description": "An accessible, responsive survey form with grouped radios/checkboxes, linked labels, and custom styling.",
+    "tags": ["HTML", "CSS", "Forms", "Accessibility"],
+    "image": null,
+    "liveUrl": "https://alialghanay.github.io/fcc-rwd-survey-form/",
+    "repoUrl": "https://github.com/alialghanay/fcc-rwd-survey-form"
+  },
+  {
+    "id": 8,
+    "title": "Product Landing Page",
+    "featured": false,
+    "role": "freeCodeCamp Project",
+    "description": "A responsive product landing page with a sticky header, embedded video, email signup form, and flexible grid layout.",
+    "tags": ["HTML", "CSS", "Responsive", "Landing Page"],
+    "image": null,
+    "liveUrl": "https://alialghanay.github.io/fcc-rwd-product-landing-page/",
+    "repoUrl": "https://github.com/alialghanay/fcc-rwd-product-landing-page"
+  },
+  {
+    "id": 9,
+    "title": "Technical Documentation Page",
+    "featured": false,
+    "role": "freeCodeCamp Project",
+    "description": "A responsive C++ technical documentation page with a sticky sidebar, smooth in-page navigation, and accessible tables.",
+    "tags": ["HTML", "CSS", "Documentation", "Responsive"],
+    "image": null,
+    "liveUrl": "https://alialghanay.github.io/fcc-rwd-technical-documentation-page/",
+    "repoUrl": "https://github.com/alialghanay/fcc-rwd-technical-documentation-page"
+  },
+  {
+    "id": 10,
+    "title": "Personal Portfolio Webpage",
+    "featured": false,
+    "role": "freeCodeCamp Project",
+    "description": "A clean, responsive single-page portfolio built with plain HTML and CSS as the capstone of the Responsive Web Design certification.",
+    "tags": ["HTML", "CSS", "Responsive", "Portfolio"],
+    "image": null,
+    "liveUrl": "https://alialghanay.github.io/fcc-rwd-personal-portfolio-webpage/",
+    "repoUrl": "https://github.com/alialghanay/fcc-rwd-personal-portfolio-webpage"
+  }
+]
