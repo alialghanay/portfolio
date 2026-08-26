@@ -21,7 +21,7 @@ export default function CategoryDialog({ title, icon, children }: CategoryDialog
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="mt-4">
+        <Button variant="outline" size="sm" className="mt-4" aria-label={`View all ${title}`}>
           <Eye className="w-4 h-4 mr-1.5" />
           View all
         </Button>

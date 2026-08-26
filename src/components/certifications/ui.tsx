@@ -7,11 +7,11 @@ import { Award, Users, CheckCircle2, GraduationCap, ExternalLink, FileText } fro
 import data from "@/lib/constants/certifications.json";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import CategoryDialog from "./category-dialog";
+import CategoryDialog from "@/components/certifications/category-dialog";
 
-const previewCert = data.certificates[data.certificates.length - 1];
-const previewAcademic = data.academic[data.academic.length - 1];
-const previewLeadership = data.leadership[data.leadership.length - 1];
+const previewCert = data.certificates.at(-1);
+const previewAcademic = data.academic.at(-1);
+const previewLeadership = data.leadership.at(-1);
 
 function CertCard({ cert }: { cert: (typeof data.certificates)[number] }) {
   return (
@@ -148,16 +148,18 @@ export default function Certifications() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <AcademicCard item={previewAcademic} />
+                {previewAcademic && <AcademicCard item={previewAcademic} />}
               </motion.div>
-              <CategoryDialog
-                title="Academic Credentials"
-                icon={<GraduationCap className="w-5 h-5 text-accent" />}
-              >
-                {data.academic.map((item) => (
-                  <AcademicCard key={item.id} item={item} />
-                ))}
-              </CategoryDialog>
+              <div className="self-start">
+                <CategoryDialog
+                  title="Academic Credentials"
+                  icon={<GraduationCap className="w-5 h-5 text-accent" />}
+                >
+                  {data.academic.map((item) => (
+                    <AcademicCard key={item.id} item={item} />
+                  ))}
+                </CategoryDialog>
+              </div>
             </div>
           </motion.div>
 
@@ -179,16 +181,18 @@ export default function Certifications() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <CertCard cert={previewCert} />
+                {previewCert && <CertCard cert={previewCert} />}
               </motion.div>
-              <CategoryDialog
-                title="Tech Certificates"
-                icon={<Award className="w-5 h-5 text-accent" />}
-              >
-                {data.certificates.map((cert) => (
-                  <CertCard key={cert.id} cert={cert} />
-                ))}
-              </CategoryDialog>
+              <div className="self-start">
+                <CategoryDialog
+                  title="Tech Certificates"
+                  icon={<Award className="w-5 h-5 text-accent" />}
+                >
+                  {data.certificates.map((cert) => (
+                    <CertCard key={cert.id} cert={cert} />
+                  ))}
+                </CategoryDialog>
+              </div>
             </div>
           </motion.div>
 
@@ -210,16 +214,18 @@ export default function Certifications() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <LeadershipCard item={previewLeadership} />
+                {previewLeadership && <LeadershipCard item={previewLeadership} />}
               </motion.div>
-              <CategoryDialog
-                title="Leadership & Community"
-                icon={<Users className="w-5 h-5 text-accent" />}
-              >
-                {data.leadership.map((item) => (
-                  <LeadershipCard key={item.id} item={item} />
-                ))}
-              </CategoryDialog>
+              <div className="self-start">
+                <CategoryDialog
+                  title="Leadership & Community"
+                  icon={<Users className="w-5 h-5 text-accent" />}
+                >
+                  {data.leadership.map((item) => (
+                    <LeadershipCard key={item.id} item={item} />
+                  ))}
+                </CategoryDialog>
+              </div>
             </div>
           </motion.div>
         </div>
