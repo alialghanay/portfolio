@@ -1,1 +1,155 @@
-{}
+{
+  "Metadata": {
+    "title": "Ali Mohammed Al-Ghanay | Software Developer, Project Lead & Teaching Assistant",
+    "description": "Experienced Software Developer, Project Lead, and University Teaching Assistant from Tripoli, Libya. Specializing in Flutter, Next.js, React, Clean Architecture, and full-stack development.",
+    "projectsTitle": "Projects | Ali Mohammed Al-Ghanay",
+    "projectsDescription": "A collection of commercial platforms, freelance work, and learning projects across mobile and web.",
+    "notesTitle": "Notes",
+    "notesSuffix": "Ali Mohammed Al-Ghanay",
+    "notesDescription": "Lecture notes and study material, published with Octospace."
+  },
+  "Common": {
+    "name": "Ali Mohammed Al-Ghanay",
+    "shortName": "Ali Alghanay",
+    "roles": "Software Developer · Project Lead · Teaching Assistant",
+    "skipToContent": "Skip to content",
+    "close": "Close"
+  },
+  "Nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "experience": "Experience",
+    "about": "About",
+    "certifications": "Certs",
+    "notes": "Notes",
+    "contact": "Contact",
+    "mainLabel": "Main navigation",
+    "mobileLabel": "Mobile navigation",
+    "footerLabel": "Footer navigation",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "otherLanguage": "العربية",
+    "switchLanguage": "Switch to Arabic"
+  },
+  "Theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Hero": {
+    "available": "Open to freelance & full-time roles",
+    "tagline": "Building cross-platform mobile apps with Flutter, full-stack web experiences with Next.js & React, and scalable systems guided by Clean Architecture and OOP.",
+    "viewProjects": "View Projects",
+    "contactMe": "Contact Me",
+    "portraitAlt": "Portrait of Ali Mohammed Al-Ghanay"
+  },
+  "Projects": {
+    "eyebrow": "Selected Work",
+    "title": "Projects",
+    "description": "Commercial platforms and freelance projects I have founded, led, or contributed to across mobile and web.",
+    "seeAll": "See all {count} projects",
+    "visitSite": "Visit site",
+    "code": "Code",
+    "visitAria": "Visit {title} live site (opens in a new tab)",
+    "codeAria": "View source code of {title} (opens in a new tab)",
+    "technologies": "Technologies",
+    "pageEyebrow": "Portfolio",
+    "pageTitle": "All Projects",
+    "pageDescription": "Commercial platforms, freelance work, and freeCodeCamp projects.",
+    "backHome": "Back to home",
+    "commercial": "Commercial & freelance",
+    "learning": "Learning projects"
+  },
+  "Experience": {
+    "eyebrow": "Career Path",
+    "title": "Experience",
+    "description": "A blend of entrepreneurship, commercial product development, teaching, and professional web development."
+  },
+  "About": {
+    "eyebrow": "About Me",
+    "title": "Software Developer, Project Lead & Teaching Assistant",
+    "location": "Based in Tripoli, Libya",
+    "bio1": "Experienced Software Developer, Project Lead, and University Teaching Assistant based in Tripoli, Libya. I specialize in cross-platform mobile development with Flutter, full-stack web applications with Next.js and React, and software architecture using Clean Architecture and OOP principles.",
+    "bio2": "As the founder of Octobits and lead developer behind live commercial platforms in Libya including Mutah.ly and Addidi.ly, I have managed end-to-end product development, from frontend implementation and staging pipelines to production deployment and team leadership.",
+    "techStack": "Tech Stack",
+    "groups": {
+      "languages": "Languages",
+      "frameworks": "Frameworks",
+      "architecture": "Architecture",
+      "tooling": "Tooling"
+    },
+    "stats": {
+      "years": "Years Coding",
+      "commercial": "Commercial Projects",
+      "focus": "Mobile Focus"
+    },
+    "education": "Education",
+    "masters": {
+      "degree": "Master of Science in Software Development",
+      "school": "University of Tripoli, Tripoli, Libya",
+      "note": "Paused for overseas scholarship — completed 2 taught semesters."
+    },
+    "bachelors": {
+      "degree": "Bachelor of Science in Software Engineering",
+      "school": "University of Tripoli, Faculty of Information Technology · Grade: 71.7%"
+    }
+  },
+  "Certifications": {
+    "eyebrow": "Credentials & Community",
+    "title": "Certifications & Education",
+    "description": "Academic background, verified certifications, and community leadership.",
+    "academic": "Academic Credentials",
+    "tech": "Tech Certificates",
+    "leadership": "Leadership & Community",
+    "viewAll": "View all",
+    "viewAllAria": "View all {title}",
+    "verifyAria": "Verify {title}",
+    "openCertAria": "Open {title} certificate",
+    "documentAria": "View {title} document"
+  },
+  "Notes": {
+    "teaserTitle": "Lecture Notes & Knowledge Base",
+    "teaserBody": "Study guides, reference materials, and deep dives from my Master's coursework and side research — organized for quick lookup and long-form reading.",
+    "browse": "Browse notes",
+    "title": "Notes",
+    "empty": "No note collections available yet.",
+    "home": "Notes home",
+    "breadcrumb": "Breadcrumb",
+    "sections": "{count, plural, one {# section} other {# sections}}"
+  },
+  "Contact": {
+    "eyebrow": "Get In Touch",
+    "title": "Contact",
+    "description": "Have a project in mind or want to collaborate? Send me a message and I'll get back to you.",
+    "talkTitle": "Let's talk",
+    "talkBody": "I'm open to freelance projects, full-time opportunities, and interesting collaborations.",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "locationValue": "Tripoli, Libya",
+    "follow": "Follow me",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell me about your project...",
+    "errors": {
+      "name": "Name must be at least 2 characters",
+      "email": "Invalid email address",
+      "message": "Message must be at least 10 characters"
+    },
+    "sendError": "Something went wrong. Please try again.",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "successTitle": "Message sent!",
+    "successBody": "Thank you for reaching out. I'll get back to you soon.",
+    "sendAnother": "Send another message"
+  },
+  "Footer": {
+    "rights": "© {year} Ali Alghanay. All rights reserved.",
+    "backToTop": "Back to top"
+  }
+}

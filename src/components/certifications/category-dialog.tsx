@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Eye } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,15 +19,17 @@ interface CategoryDialogProps {
 }
 
 export default function CategoryDialog({ title, icon, children }: CategoryDialogProps) {
+  const t = useTranslations("Certifications");
+  const tCommon = useTranslations("Common");
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="mt-4" aria-label={`View all ${title}`}>
-          <Eye className="w-4 h-4 mr-1.5" />
-          View all
+        <Button variant="outline" size="sm" className="mt-4" aria-label={t("viewAllAria", { title })}>
+          <Eye aria-hidden="true" />
+          {t("viewAll")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl max-h-[80dvh] overflow-y-auto bg-card">
+      <DialogContent closeLabel={tCommon("close")} className="max-w-[calc(100%-2rem)] sm:max-w-2xl max-h-[80dvh] overflow-y-auto bg-popover text-popover-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <span aria-hidden="true">{icon}</span>

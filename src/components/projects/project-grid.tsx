@@ -2,23 +2,17 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
-import { cn } from "@/lib/utils/cn";
+import { ArrowUpRight, Github } from "lucide-react";
+import { useTranslations } from "next-intl";
+import type { Project } from "@/lib/content";
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -27,106 +21,92 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeOut" as const },
+    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
-export interface Project {
-  id: number;
-  title: string;
-  role: string;
-  description: string;
-  tags: string[];
-  image: string | null;
-  liveUrl: string;
-  repoUrl: string | null;
-  featured?: boolean;
+function ProjectCard({ project }: { project: Project }) {
+  const t = useTranslations("Projects");
+  const hasLive = Boolean(project.liveUrl) && project.liveUrl !== "#";
+
+  return (
+    <article className="group relative flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5">
+      <span
+        aria-hidden="true"
+        className="mb-5 grid size-12 place-items-center rounded-xl border border-border bg-gradient-to-br from-accent/15 to-accent/0 font-heading text-sm font-bold text-accent"
+      >
+        {project.initials}
+      </span>
+
+      <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-accent rtl:text-sm">
+        {project.role}
+      </p>
+      <h3 className="font-heading text-xl font-semibold text-card-foreground">
+        {project.title}
+      </h3>
+      <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-muted-foreground">
+        {project.description}
+      </p>
+
+      <ul className="mt-5 mb-6 flex flex-wrap gap-1.5" aria-label={t("technologies")}>
+        {project.tags.map((tag) => (
+          <li key={tag}>
+            <Badge variant="secondary" className="font-normal text-xs">
+              {tag}
+            </Badge>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-auto flex items-center gap-2 border-t border-border pt-5">
+        {hasLive && (
+          <Button asChild size="sm" className="h-10 flex-1 rounded-full">
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("visitAria", { title: project.title })}
+            >
+              {t("visitSite")}
+              <ArrowUpRight
+                aria-hidden="true"
+                className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100"
+              />
+            </a>
+          </Button>
+        )}
+        {project.repoUrl && (
+          <Button asChild size="sm" variant="outline" className="h-10 flex-1 rounded-full">
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("codeAria", { title: project.title })}
+            >
+              <Github aria-hidden="true" />
+              {t("code")}
+            </a>
+          </Button>
+        )}
+      </div>
+    </article>
+  );
 }
 
 export default function ProjectGrid({ projects }: { projects: Project[] }) {
   return (
-    <motion.div
+    <motion.ul
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
     >
       {projects.map((project) => (
-        <motion.div key={project.id} variants={itemVariants}>
-          <Card className="group h-full flex flex-col overflow-hidden border-border bg-card hover:border-accent/50 transition-colors duration-300">
-            <CardHeader className="pb-3">
-              <p className="text-xs font-medium text-accent uppercase tracking-wider mb-1">
-                {project.role}
-              </p>
-              <CardTitle className="font-heading text-xl text-card-foreground">
-                {project.title}
-              </CardTitle>
-              <CardDescription className="text-muted-foreground line-clamp-3">
-                {project.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col">
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    className="font-normal text-xs"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="mt-auto flex items-center gap-3">
-                {project.liveUrl && project.liveUrl !== "#" && (
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="default"
-                    className={cn(
-                      "rounded-full",
-                      !project.repoUrl && "flex-1"
-                    )}
-                  >
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Visit ${project.title} live site`}
-                    >
-                      <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
-                      Visit
-                    </a>
-                  </Button>
-                )}
-                {project.repoUrl && (
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    className={cn(
-                      "rounded-full",
-                      !project.liveUrl && "flex-1"
-                    )}
-                  >
-                    <a
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`View source code of ${project.title}`}
-                    >
-                      <Github className="mr-1.5 h-3.5 w-3.5" />
-                      Code
-                    </a>
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        <motion.li key={project.id} variants={itemVariants}>
+          <ProjectCard project={project} />
+        </motion.li>
       ))}
-    </motion.div>
+    </motion.ul>
   );
 }

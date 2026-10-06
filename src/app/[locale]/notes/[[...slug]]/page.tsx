@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/lib/utils/i18n/routing";
 import { loadManifest, buildNotesTree, findNodeBySlug, getBreadcrumbs } from "@/lib/utils/notes-tree";
 import { NotesNavigation } from "@/components/notes/navigation";
@@ -61,15 +62,16 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; slug?: string[] }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
   const manifest = loadManifest();
-  const tree = manifest ? buildNotesTree(manifest) : null;
+  const tree = manifest ? buildNotesTree(manifest, t("notesTitle")) : null;
   const activeNode = tree ? findNodeBySlug(tree, slug ?? []) : null;
-  const title = activeNode?.title ? `${activeNode.title} | Notes` : "Notes";
+  const title = activeNode?.title ? `${activeNode.title} | ${t("notesTitle")}` : t("notesTitle");
 
   return {
-    title: `${title} | Ali Mohammed Al-Ghanay`,
-    description: "Lecture notes and study material, published with Octospace.",
+    title: `${title} | ${t("notesSuffix")}`,
+    description: t("notesDescription"),
   };
 }
 
@@ -79,32 +81,34 @@ export default async function NotesPage({
   params: Promise<{ locale: string; slug?: string[] }>;
 }) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("Notes");
   const isIndex = !slug || slug.length === 0;
   const html = loadFragment(slug, locale);
 
   const manifest = loadManifest();
-  const tree = manifest ? buildNotesTree(manifest) : null;
+  const tree = manifest ? buildNotesTree(manifest, t("title")) : null;
   const activeNode = tree ? findNodeBySlug(tree, slug ?? []) : null;
   const breadcrumbs = tree ? getBreadcrumbs(tree, slug ?? []) : [];
-  const title = activeNode?.title ?? "Notes";
+  const title = activeNode?.title ?? t("title");
 
   if (!isIndex && html === undefined) notFound();
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-6 pt-24 pb-16">
+    <main id="main" className="mx-auto w-full max-w-7xl px-6 pt-12 pb-24 sm:pt-16">
       <div className="flex flex-col lg:flex-row gap-10">
         {tree && <NotesNavigation tree={tree} activeSlug={slug ?? []} />}
 
         <article className="flex-1 min-w-0">
           <NotesBreadcrumbs items={breadcrumbs} />
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-8">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-balance text-foreground mb-8">
             {title}
           </h1>
           {isIndex ? (
             tree ? (
               <VolumeList tree={tree} />
             ) : (
-              <p className="text-muted-foreground">No note collections available yet.</p>
+              <p className="text-muted-foreground">{t("empty")}</p>
             )
           ) : (
             <div

@@ -14,22 +14,44 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
-import { Mail, Phone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-import { FiLinkedin, FiGithub } from "react-icons/fi";
-import { FaXTwitter } from "react-icons/fa6";
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Mail, Phone, MapPin, Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import SectionHeading from "@/components/ui/section-heading";
+import SocialLinks from "@/components/ui/social-links";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
-});
+// Built per render so validation messages follow the active locale.
+const makeSchema = (errors: { name: string; email: string; message: string }) =>
+  z.object({
+    name: z.string().min(2, errors.name),
+    email: z.string().email(errors.email),
+    message: z.string().min(10, errors.message),
+  });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof makeSchema>>;
 
 const Contact = () => {
+  const t = useTranslations("Contact");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const formSchema = useMemo(
+    () =>
+      makeSchema({
+        name: t("errors.name"),
+        email: t("errors.email"),
+        message: t("errors.message"),
+      }),
+    [t]
+  );
+
+  // Email and phone are LTR values; the `dir="ltr"` span in the row keeps
+  // them readable inside the Arabic layout.
+  const contactRows = [
+    { Icon: Mail, label: t("email"), value: "alialghanay@gmail.com", href: "mailto:alialghanay@gmail.com", ltr: true },
+    { Icon: Phone, label: t("phone"), value: "+218 91 865 3414", href: "tel:+218918653414", ltr: true },
+    { Icon: MapPin, label: t("location"), value: t("locationValue"), href: null, ltr: false },
+  ];
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -63,143 +85,97 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 sm:py-32 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-3">
-            Get In Touch
-          </p>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Contact
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have a project in mind or want to collaborate? Send me a message and I&apos;ll get back to you.
-          </p>
-        </motion.div>
+        <SectionHeading
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
           {/* Contact info */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
             className="lg:col-span-2 space-y-8"
           >
             <div>
-              <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
-                Let&apos;s talk
+              <h3 className="font-heading text-2xl font-semibold text-foreground mb-3">
+                {t("talkTitle")}
               </h3>
-              <p className="text-muted-foreground mb-6">
-                I&apos;m open to freelance projects, full-time opportunities, and interesting collaborations.
+              <p className="text-muted-foreground">
+                {t("talkBody")}
               </p>
             </div>
 
-            <div className="space-y-4">
-              <a
-                href="mailto:alialghanay@gmail.com"
-                className="flex items-center gap-3 text-foreground hover:text-accent transition-colors group"
-              >
-                <span className="p-2.5 rounded-full bg-muted group-hover:bg-accent/10 transition-colors">
-                  <Mail className="w-5 h-5" />
-                </span>
-                <span>alialghanay@gmail.com</span>
-              </a>
-              <a
-                href="tel:+218918653414"
-                className="flex items-center gap-3 text-foreground hover:text-accent transition-colors group"
-              >
-                <span className="p-2.5 rounded-full bg-muted group-hover:bg-accent/10 transition-colors">
-                  <Phone className="w-5 h-5" />
-                </span>
-                <span>+218 91 865 3414</span>
-              </a>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <span className="p-2.5 rounded-full bg-muted">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </span>
-                <span>Tripoli, Libya</span>
-              </div>
-            </div>
+            <ul className="space-y-3">
+              {contactRows.map(({ Icon, label, value, href, ltr }) => {
+                const body = (
+                  <>
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-xs uppercase tracking-wider text-muted-foreground">{label}</span>
+                      <span dir={ltr ? "ltr" : undefined} className="block truncate text-start font-medium text-foreground">{value}</span>
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={label}>
+                    {href ? (
+                      <a
+                        href={href}
+                        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-3 transition-colors outline-none hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {body}
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-3">{body}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
 
             <div>
-              <h4 className="font-heading text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                Follow me
+              <h4 className="font-heading text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                {t("follow")}
               </h4>
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://www.linkedin.com/in/alialghanay"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-full bg-muted text-foreground hover:bg-accent hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label="LinkedIn"
-                >
-                  <FiLinkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://x.com/alialghanay"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-full bg-muted text-foreground hover:bg-accent hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label="X (Twitter)"
-                >
-                  <FaXTwitter className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://github.com/alialghanay"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-full bg-muted text-foreground hover:bg-accent hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label="GitHub"
-                >
-                  <FiGithub className="w-5 h-5" />
-                </a>
-              </div>
+              <SocialLinks className="-ms-2.5" linkClassName="text-foreground" />
             </div>
           </motion.div>
 
           {/* Contact form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-3"
           >
             {status === "success" ? (
-              <div className="flex flex-col items-center justify-center h-full text-center p-8 rounded-2xl border border-border bg-muted/30">
-                <CheckCircle2 className="w-12 h-12 text-green-600 mb-4" />
+              <div role="status" className="flex flex-col items-center justify-center h-full min-h-80 text-center p-8 rounded-3xl border border-border bg-card shadow-sm">
+                <span className="mb-4 grid size-14 place-items-center rounded-full bg-accent/10 text-accent">
+                  <CheckCircle2 className="size-7" aria-hidden="true" />
+                </span>
                 <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
-                  Message sent!
+                  {t("successTitle")}
                 </h3>
-                <p className="text-muted-foreground mb-6">
-                  Thank you for reaching out. I&apos;ll get back to you soon.
+                <p className="text-muted-foreground">
+                  {t("successBody")}
                 </p>
                 <Button onClick={() => setStatus("idle")} variant="outline" className="rounded-full">
-                  Send another message
+                  {t("sendAnother")}
                 </Button>
               </div>
             ) : (
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="flex flex-col gap-5 p-6 sm:p-8 rounded-2xl border border-border bg-card"
+                  noValidate
+                  className="flex flex-col gap-5 p-6 sm:p-8 rounded-3xl border border-border bg-card shadow-sm"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <FormField
@@ -207,9 +183,9 @@ const Contact = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Name</FormLabel>
+                          <FormLabel>{t("nameLabel")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your name" {...field} />
+                            <Input autoComplete="name" placeholder={t("namePlaceholder")} className="h-11" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -221,9 +197,9 @@ const Contact = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t("emailLabel")}</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="your@email.com" {...field} />
+                            <Input type="email" autoComplete="email" dir="ltr" placeholder={t("emailPlaceholder")} className="h-11" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -236,9 +212,9 @@ const Contact = () => {
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Message</FormLabel>
+                        <FormLabel>{t("messageLabel")}</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Tell me about your project..." rows={5} {...field} />
+                          <Textarea placeholder={t("messagePlaceholder")} rows={5} className="min-h-36" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -246,24 +222,27 @@ const Contact = () => {
                   />
 
                   {status === "error" && (
-                    <div className="flex items-center gap-2 text-destructive text-sm">
-                      <AlertCircle className="w-4 h-4" />
-                      Something went wrong. Please try again.
+                    <div role="alert" className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-destructive text-sm">
+                      <AlertCircle className="size-4 shrink-0" aria-hidden="true" />
+                      {t("sendError")}
                     </div>
                   )}
 
                   <Button
                     type="submit"
                     disabled={status === "loading"}
-                    className="rounded-full px-8 py-3 h-auto"
+                    className="h-12 w-full rounded-full px-8 sm:w-auto sm:self-end"
                   >
                     {status === "loading" ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Sending...
+                        <Loader2 className="animate-spin" aria-hidden="true" />
+                        {t("sending")}
                       </>
                     ) : (
-                      "Send Message"
+                      <>
+                        {t("send")}
+                        <Send aria-hidden="true" className="rtl:-scale-x-100" />
+                      </>
                     )}
                   </Button>
                 </form>

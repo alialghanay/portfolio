@@ -41,10 +41,10 @@ function titleFromSegments(segments: string[]): string {
   return humanizeSegment(last);
 }
 
-export function buildNotesTree(manifest: MigrationManifest): NotesNode {
+export function buildNotesTree(manifest: MigrationManifest, rootTitle = "Notes"): NotesNode {
   const root: NotesNode = {
     slug: "",
-    title: "Notes",
+    title: rootTitle,
     outputPath: "",
     children: [],
   };

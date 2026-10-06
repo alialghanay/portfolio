@@ -4,22 +4,23 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Award, Users, CheckCircle2, GraduationCap, ExternalLink, FileText } from "lucide-react";
-import data from "@/lib/constants/certifications.json";
+import { useLocale, useTranslations } from "next-intl";
+import { getContent, type Content } from "@/lib/content";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CategoryDialog from "@/components/certifications/category-dialog";
+import SectionHeading from "@/components/ui/section-heading";
 
-const previewCert = data.certificates.at(-1);
-const previewAcademic = data.academic.at(-1);
-const previewLeadership = data.leadership.at(-1);
+type Certs = Content["certifications"];
 
-function CertCard({ cert }: { cert: (typeof data.certificates)[number] }) {
+function CertCard({ cert }: { cert: Certs["certificates"][number] }) {
+  const t = useTranslations("Certifications");
   return (
-    <Card className="border-border bg-card hover:border-accent/30 transition-colors">
+    <Card className="gap-0 py-0 rounded-2xl border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-md">
       <CardContent className="p-4 flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+            <CheckCircle2 className="size-5 text-accent mt-0.5 shrink-0" aria-hidden="true" />
             <div className="min-w-0">
               <p className="font-medium text-foreground">{cert.title}</p>
               <p className="text-sm text-muted-foreground">{cert.issuer}</p>
@@ -29,14 +30,14 @@ function CertCard({ cert }: { cert: (typeof data.certificates)[number] }) {
             </div>
           </div>
           {cert.credentialUrl && (
-            <Button asChild size="sm" variant="ghost" className="shrink-0">
+            <Button asChild size="icon" variant="ghost" className="size-10 shrink-0 rounded-full text-muted-foreground">
               <a
                 href={cert.credentialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Verify ${cert.title}`}
+                aria-label={t("verifyAria", { title: cert.title })}
               >
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink aria-hidden="true" />
               </a>
             </Button>
           )}
@@ -46,14 +47,15 @@ function CertCard({ cert }: { cert: (typeof data.certificates)[number] }) {
             href={cert.credentialUrl || cert.imageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="block rounded-md overflow-hidden border border-border"
+            className="block overflow-hidden rounded-lg border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={t("openCertAria", { title: cert.title })}
           >
             <Image
               src={cert.imageUrl}
-              alt={`${cert.title} certificate`}
+              alt=""
               width={800}
               height={600}
-              className="w-full h-auto"
+              className="h-auto w-full transition-transform duration-500 hover:scale-[1.02]"
             />
           </a>
         )}
@@ -62,28 +64,29 @@ function CertCard({ cert }: { cert: (typeof data.certificates)[number] }) {
   );
 }
 
-function AcademicCard({ item }: { item: (typeof data.academic)[number] }) {
+function AcademicCard({ item }: { item: Certs["academic"][number] }) {
+  const t = useTranslations("Certifications");
   return (
-    <Card className="border-border bg-card hover:border-accent/30 transition-colors">
+    <Card className="gap-0 py-0 rounded-2xl border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-md">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="font-medium text-foreground">{item.title}</p>
             <p className="text-sm text-muted-foreground">{item.institution}</p>
-            <p className="text-xs text-accent mt-1 font-medium">{item.status}</p>
+            <p className="mt-2 inline-flex rounded-full bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">{item.status}</p>
             {item.details && (
               <p className="text-sm text-muted-foreground mt-2">{item.details}</p>
             )}
           </div>
           {item.documentUrl && (
-            <Button asChild size="sm" variant="ghost" className="shrink-0">
+            <Button asChild size="icon" variant="ghost" className="size-10 shrink-0 rounded-full text-muted-foreground">
               <a
                 href={item.documentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`View ${item.title} document`}
+                aria-label={t("documentAria", { title: item.title })}
               >
-                <FileText className="w-4 h-4" />
+                <FileText aria-hidden="true" />
               </a>
             </Button>
           )}
@@ -93,11 +96,11 @@ function AcademicCard({ item }: { item: (typeof data.academic)[number] }) {
   );
 }
 
-function LeadershipCard({ item }: { item: (typeof data.leadership)[number] }) {
+function LeadershipCard({ item }: { item: Certs["leadership"][number] }) {
   return (
-    <Card className="border-border bg-card hover:border-accent/30 transition-colors">
+    <Card className="gap-0 py-0 rounded-2xl border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-md">
       <CardContent className="p-4 flex items-start gap-3">
-        <Users className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+        <Users className="size-5 text-accent mt-0.5 shrink-0" aria-hidden="true" />
         <div>
           <p className="font-medium text-foreground">{item.title}</p>
           <p className="text-sm text-muted-foreground">{item.organization}</p>
@@ -108,26 +111,20 @@ function LeadershipCard({ item }: { item: (typeof data.leadership)[number] }) {
 }
 
 export default function Certifications() {
+  const t = useTranslations("Certifications");
+  const data = getContent(useLocale()).certifications;
+  // The last entry of each category is the one previewed on the home page.
+  const previewCert = data.certificates.at(-1);
+  const previewAcademic = data.academic.at(-1);
+  const previewLeadership = data.leadership.at(-1);
   return (
     <section id="certifications" className="py-24 sm:py-32 px-6 bg-muted/30">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-3">
-            Credentials & Community
-          </p>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Certifications & Education
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Academic background, verified certifications, and community leadership.
-          </p>
-        </motion.div>
+        <SectionHeading
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Academic Credentials */}
@@ -137,11 +134,11 @@ export default function Certifications() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <span aria-hidden="true">
-                <GraduationCap className="w-5 h-5 text-accent" />
+            <h3 className="mb-5 flex items-center gap-3 font-heading text-lg font-semibold text-foreground">
+              <span aria-hidden="true" className="grid size-9 place-items-center rounded-lg bg-accent/10 text-accent">
+                <GraduationCap className="size-4.5" />
               </span>
-              Academic Credentials
+              {t("academic")}
             </h3>
             <div className="flex flex-col gap-4">
               <motion.div
@@ -154,7 +151,7 @@ export default function Certifications() {
               </motion.div>
               <div className="self-start">
                 <CategoryDialog
-                  title="Academic Credentials"
+                  title={t("academic")}
                   icon={<GraduationCap className="w-5 h-5 text-accent" />}
                 >
                   {data.academic.map((item) => (
@@ -172,11 +169,11 @@ export default function Certifications() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <span aria-hidden="true">
-                <Award className="w-5 h-5 text-accent" />
+            <h3 className="mb-5 flex items-center gap-3 font-heading text-lg font-semibold text-foreground">
+              <span aria-hidden="true" className="grid size-9 place-items-center rounded-lg bg-accent/10 text-accent">
+                <Award className="size-4.5" />
               </span>
-              Tech Certificates
+              {t("tech")}
             </h3>
             <div className="flex flex-col gap-4">
               <motion.div
@@ -189,7 +186,7 @@ export default function Certifications() {
               </motion.div>
               <div className="self-start">
                 <CategoryDialog
-                  title="Tech Certificates"
+                  title={t("tech")}
                   icon={<Award className="w-5 h-5 text-accent" />}
                 >
                   {data.certificates.map((cert) => (
@@ -207,11 +204,11 @@ export default function Certifications() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className="font-heading text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <span aria-hidden="true">
-                <Users className="w-5 h-5 text-accent" />
+            <h3 className="mb-5 flex items-center gap-3 font-heading text-lg font-semibold text-foreground">
+              <span aria-hidden="true" className="grid size-9 place-items-center rounded-lg bg-accent/10 text-accent">
+                <Users className="size-4.5" />
               </span>
-              Leadership & Community
+              {t("leadership")}
             </h3>
             <div className="flex flex-col gap-4">
               <motion.div
@@ -224,7 +221,7 @@ export default function Certifications() {
               </motion.div>
               <div className="self-start">
                 <CategoryDialog
-                  title="Leadership & Community"
+                  title={t("leadership")}
                   icon={<Users className="w-5 h-5 text-accent" />}
                 >
                   {data.leadership.map((item) => (

@@ -31,17 +31,18 @@ function NavigationNode({ node, activeSlug, depth, path }: NavigationNodeProps) 
         {hasChildren && (
           <ChevronRight
             className={cn(
-              "w-3.5 h-3.5 text-muted-foreground mr-1 transition-transform",
-              expanded && "rotate-90"
+              "size-3.5 shrink-0 text-muted-foreground me-1 transition-transform rtl:rotate-180",
+              expanded && "rotate-90 rtl:rotate-90"
             )}
           />
         )}
-        {!hasChildren && <span className="w-3.5 h-3.5 mr-1" />}
+        {!hasChildren && <span className="size-3.5 shrink-0 me-1" aria-hidden="true" />}
         {node.outputPath ? (
           <Link
             href={buildHref(currentPath)}
+            aria-current={isActiveLeaf ? "page" : undefined}
             className={cn(
-              "flex-1 text-sm rounded-md px-2 py-1 transition-colors",
+              "flex-1 text-sm rounded-md px-2 py-1.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
               isActiveLeaf
                 ? "bg-accent/10 text-accent font-medium"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -61,7 +62,7 @@ function NavigationNode({ node, activeSlug, depth, path }: NavigationNodeProps) 
         )}
       </div>
       {hasChildren && expanded && (
-        <ul className="pl-4 border-l border-border ml-3 mt-1 space-y-0.5">
+        <ul className="ps-4 border-s border-border ms-3 mt-1 space-y-0.5">
           {node.children.map((child) => (
             <NavigationNode
               key={child.slug}
@@ -84,13 +85,13 @@ interface NotesNavigationProps {
 
 export function NotesNavigation({ tree, activeSlug = [] }: NotesNavigationProps) {
   return (
-    <nav className="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-8rem)] overflow-y-auto pr-2">
+    <nav className="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-8rem)] overflow-y-auto pe-2" aria-label={tree.title}>
       <div className="mb-4">
         <Link
           href="/notes"
           className="flex items-center gap-2 font-heading font-semibold text-foreground hover:text-accent transition-colors"
         >
-          <BookOpen className="w-5 h-5" />
+          <BookOpen className="size-5" aria-hidden="true" />
           {tree.title}
         </Link>
       </div>

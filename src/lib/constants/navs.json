@@ -25,6 +25,11 @@
     "url": "#certifications"
   },
   {
+    "id": 7,
+    "name": "Notes",
+    "url": "/notes"
+  },
+  {
     "id": 6,
     "name": "Contact",
     "url": "#contact"
