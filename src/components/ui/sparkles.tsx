@@ -31,6 +31,8 @@ export const SparklesCore = (props: ParticlesProps) => {
   } = props;
   const [init, setInit] = useState(false);
   useEffect(() => {
+    // Decorative motion only: never start the engine for reduced-motion users.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => {
@@ -69,11 +71,11 @@ export const SparklesCore = (props: ParticlesProps) => {
               zIndex: 1,
             },
 
-            fpsLimit: 120,
+            fpsLimit: 60,
             interactivity: {
               events: {
                 onClick: {
-                  enable: true,
+                  enable: false,
                   mode: "push",
                 },
                 onHover: {

@@ -14,20 +14,46 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
-import { Mail, Phone } from "lucide-react";
-import { FiLinkedin, FiX, FiGithub } from "react-icons/fi";
-// Zod schema for validation
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
-});
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Mail, Phone, MapPin, Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
+import { motion } from "framer-motion";
+import SectionHeading from "@/components/ui/section-heading";
+import SocialLinks from "@/components/ui/social-links";
+
+// Built per render so validation messages follow the active locale.
+const makeSchema = (errors: { name: string; email: string; message: string }) =>
+  z.object({
+    name: z.string().min(2, errors.name),
+    email: z.string().email(errors.email),
+    message: z.string().min(10, errors.message),
+  });
+
+type FormValues = z.infer<ReturnType<typeof makeSchema>>;
 
 const Contact = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const t = useTranslations("Contact");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const form = useForm({
+  const formSchema = useMemo(
+    () =>
+      makeSchema({
+        name: t("errors.name"),
+        email: t("errors.email"),
+        message: t("errors.message"),
+      }),
+    [t]
+  );
+
+  // Email and phone are LTR values; the `dir="ltr"` span in the row keeps
+  // them readable inside the Arabic layout.
+  const contactRows = [
+    { Icon: Mail, label: t("email"), value: "alialghanay@gmail.com", href: "mailto:alialghanay@gmail.com", ltr: true },
+    { Icon: Phone, label: t("phone"), value: "+218 91 865 3414", href: "tel:+218918653414", ltr: true },
+    { Icon: MapPin, label: t("location"), value: t("locationValue"), href: null, ltr: false },
+  ];
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -36,134 +62,193 @@ const Contact = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch("https://formspree.io/f/moveaqqk", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+  const onSubmit = async (values: FormValues) => {
+    setStatus("loading");
+    try {
+      const response = await fetch("https://formspree.io/f/moveaqqk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
 
-    if (response.ok) {
-      setSubmitted(true);
+      if (response.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
     }
   };
 
   return (
-    <section className="py-12 px-6 max-w-4xl mx-auto text-center" id="contact">
-      <h1 className="text-3xl font-bold mb-4">Contact</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-        Feel free to reach out to me via the form below or through my social
-        media channels.
-      </p>
+    <section id="contact" className="py-24 sm:py-32 px-6 bg-background">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeading
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
+        />
 
-      {submitted ? (
-        <p className="text-green-600 font-semibold">
-          Thank you! Your message has been sent.
-        </p>
-      ) : (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-4"
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          {/* Contact info */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-2 space-y-8"
           >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <h3 className="font-heading text-2xl font-semibold text-foreground mb-3">
+                {t("talkTitle")}
+              </h3>
+              <p className="text-muted-foreground">
+                {t("talkBody")}
+              </p>
+            </div>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="Your Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <ul className="space-y-3">
+              {contactRows.map(({ Icon, label, value, href, ltr }) => {
+                const body = (
+                  <>
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-xs uppercase tracking-wider text-muted-foreground">{label}</span>
+                      <span dir={ltr ? "ltr" : undefined} className="block truncate text-start font-medium text-foreground">{value}</span>
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={label}>
+                    {href ? (
+                      <a
+                        href={href}
+                        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-3 transition-colors outline-none hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {body}
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-3">{body}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
 
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Message</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Your Message" rows={5} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <h4 className="font-heading text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                {t("follow")}
+              </h4>
+              <SocialLinks className="-ms-2.5" linkClassName="text-foreground" />
+            </div>
+          </motion.div>
 
-            <Button
-              type="submit"
-              className="bg-primary py-3 px-6 rounded-lg hover:bg-primary-dark transition"
-            >
-              Send Message
-            </Button>
-          </form>
-        </Form>
-      )}
+          {/* Contact form */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-3"
+          >
+            {status === "success" ? (
+              <div role="status" className="flex flex-col items-center justify-center h-full min-h-80 text-center p-8 rounded-3xl border border-border bg-card shadow-sm">
+                <span className="mb-4 grid size-14 place-items-center rounded-full bg-accent/10 text-accent">
+                  <CheckCircle2 className="size-7" aria-hidden="true" />
+                </span>
+                <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
+                  {t("successTitle")}
+                </h3>
+                <p className="text-muted-foreground">
+                  {t("successBody")}
+                </p>
+                <Button onClick={() => setStatus("idle")} variant="outline" className="rounded-full">
+                  {t("sendAnother")}
+                </Button>
+              </div>
+            ) : (
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  noValidate
+                  className="flex flex-col gap-5 p-6 sm:p-8 rounded-3xl border border-border bg-card shadow-sm"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("nameLabel")}</FormLabel>
+                          <FormControl>
+                            <Input autoComplete="name" placeholder={t("namePlaceholder")} className="h-11" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-      {/* Contact Info */}
-      <div className="mt-10 text-center space-y-4">
-        <p className="text-lg font-semibold">Or contact me directly:</p>
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-6">
-          <a
-            href="mailto:alialghanay6@gmail.com"
-            className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary"
-          >
-            <Mail className="w-5 h-5" />
-            <span>alialghanay6@gmail.com</span>
-          </a>
-          <a
-            href="tel:+218918653414"
-            className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary"
-          >
-            <Phone className="w-5 h-5" />
-            <span>+218 91 865 3414</span>
-          </a>
-        </div>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("emailLabel")}</FormLabel>
+                          <FormControl>
+                            <Input type="email" autoComplete="email" dir="ltr" placeholder={t("emailPlaceholder")} className="h-11" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-        {/* Social Media Links */}
-        <div className="flex justify-center space-x-6 mt-4">
-          <a
-            href="https://www.linkedin.com/in/alialghanay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-700 dark:text-gray-300 hover:text-primary"
-          >
-            <FiLinkedin className="w-6 h-6" />
-          </a>
-          <a
-            href="https://x.com/alialghanay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-700 dark:text-gray-300 hover:text-primary"
-          >
-            <FiX className="w-6 h-6" />
-          </a>
-          <a
-            href="https://github.com/alialghanay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-700 dark:text-gray-300 hover:text-primary"
-          >
-            <FiGithub className="w-6 h-6" />
-          </a>
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("messageLabel")}</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder={t("messagePlaceholder")} rows={5} className="min-h-36" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {status === "error" && (
+                    <div role="alert" className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-destructive text-sm">
+                      <AlertCircle className="size-4 shrink-0" aria-hidden="true" />
+                      {t("sendError")}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="h-12 w-full rounded-full px-8 sm:w-auto sm:self-end"
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <Loader2 className="animate-spin" aria-hidden="true" />
+                        {t("sending")}
+                      </>
+                    ) : (
+                      <>
+                        {t("send")}
+                        <Send aria-hidden="true" className="rtl:-scale-x-100" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            )}
+          </motion.div>
         </div>
       </div>
     </section>
